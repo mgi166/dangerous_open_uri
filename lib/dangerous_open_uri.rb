@@ -8,8 +8,7 @@ OpenURI.module_eval do
     if target.userinfo
       userinfo = target.userinfo
       user, pass = userinfo.to_s.split(':', -1)
-      options[:http_basic_authentication] = user
-      options[:http_basic_authentication] = pass
+      options[:http_basic_authentication] = [user, pass]
       target.userinfo = ""
     end
 
