@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["skskoari@gmail.com"]
   spec.summary       = %q{Force open dangerous uri.}
   spec.description   = %q{Conclusion, Be using This gem is STRONGLY **deprecated**. Because RFC3986 says userinfo in URI is dangerous. But if you want to open-uri such dangerous uri absolutely, it is preferable to use this gem.}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/mgi166/dangerous_open_uri"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
