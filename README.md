@@ -4,7 +4,7 @@ Force open dangerous uri.
 
 ## Detail
 
-Conclusion, Be using This gem is STRONGLY **deprecated**. Because RFC3986 says userinfo in URI is dangerous.  
+Conclusion, Be using this gem is STRONGLY **deprecated**. Because RFC3986 says userinfo in URI is dangerous.  
 So that open-uri will not support it.  
 
 But if you want to open-uri such dangerous uri absolutely, it is preferable to use this gem.  
@@ -31,6 +31,9 @@ Or install it yourself as:
 
 ```ruby
 require 'dangerous_open_uri'
+
+open('http://user:pass@example.co.jp/secret/page').read
+#=> Enable to read `http://user:pass@example.co.jp/secret/page` sources
 ```
 
 ## Contributing
