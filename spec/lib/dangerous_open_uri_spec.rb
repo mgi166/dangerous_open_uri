@@ -10,7 +10,7 @@ describe OpenURI do
         ).to eq('aaa')
       end
 
-      it 'opens dangerous uri(userinfo has two ":")' do
+      it 'given userinfo has two ":" opens dangerous uri' do
         stub_request(:any, 'user:pass@www.example.com/secret/page.html')
           .to_return(body: 'aaa')
 
@@ -19,7 +19,7 @@ describe OpenURI do
         ).to eq('aaa')
       end
 
-      it 'opens dangerous uri(has user but no password)' do
+      it 'given has user but no password opens dangerous uri' do
         stub_request(:any, 'user:@www.example.com/secret/page.html')
           .to_return(body: 'aaa')
 
@@ -28,7 +28,7 @@ describe OpenURI do
         ).to eq('aaa')
       end
 
-      it 'opens dangerous uri(no user but has password)' do
+      it 'given no user but has password opens dangerous uri' do
         stub_request(:any, ':pass@www.example.com/secret/page.html')
           .to_return(body: 'aaa')
 
@@ -37,19 +37,13 @@ describe OpenURI do
         ).to eq('aaa')
       end
 
-      it 'opens dangerous uri(userinfo == ":")' do
+      it 'given userinfo == ":" opens dangerous uri' do
         stub_request(:any, 'www.example.com/secret/page.html')
           .to_return(body: 'aaa')
 
         expect(
           open('http://:@www.example.com/secret/page.html').read
         ).to eq('aaa')
-      end
-
-      it 'raises error(bad uri)' do
-        expect do
-          open('http://@@www.example.com/secret/page.html').read
-        end.to raise_error URI::InvalidURIError
       end
     end
 
@@ -59,6 +53,12 @@ describe OpenURI do
         expect(
           open('http://www.example.com/index.html').read
         ).to eq('aaa')
+      end
+
+      it 'given bad uri raises error' do
+        expect do
+          open('http://@@www.example.com/secret/page.html').read
+        end.to raise_error URI::InvalidURIError
       end
     end
   end
