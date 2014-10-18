@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/mgi166/dangerous_open_uri.svg?branch=master)](https://travis-ci.org/mgi166/dangerous_open_uri)
 [![Code Climate](https://codeclimate.com/github/mgi166/dangerous_open_uri/badges/gpa.svg)](https://codeclimate.com/github/mgi166/dangerous_open_uri)
 
 # DangerousOpenUri
