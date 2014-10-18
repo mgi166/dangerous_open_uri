@@ -45,6 +45,15 @@ describe OpenURI do
           open('http://:@www.example.com/secret/page.html').read
         ).to eq('aaa')
       end
+
+      it 'given userinfo not include ":" opens dangerous uri' do
+        stub_request(:any, 'baduserinfo:@www.example.com/secret/page.html')
+          .to_return(body: 'aaa')
+
+        expect(
+          open('http://baduserinfo@www.example.com/secret/page.html').read
+        ).to eq('aaa')
+      end
     end
 
     context 'when request no basic authentication' do
