@@ -1,7 +1,7 @@
 require "dangerous_open_uri/version"
 require 'open-uri'
 
-OpenURI.module_eval do
+module OpenURI
   instance_eval { alias :original_open_http :open_http }
 
   def self.open_http(buf, target, proxy, options)
