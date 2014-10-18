@@ -1,3 +1,5 @@
+[![Code Climate](https://codeclimate.com/github/mgi166/dangerous_open_uri/badges/gpa.svg)](https://codeclimate.com/github/mgi166/dangerous_open_uri)
+
 # DangerousOpenUri
 
 Force open dangerous uri.
