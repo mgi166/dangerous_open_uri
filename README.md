@@ -38,6 +38,9 @@ require 'dangerous_open_uri'
 
 open('http://user:pass@example.co.jp/secret/page').read
 #=> Enable to read `http://user:pass@example.co.jp/secret/page` sources
+
+open('http://example.co.jp/index.html, proxy: 'http://user:pass@proxy.example.com')
+#=> Proxy basic authentication uses `user` and `pass`
 ```
 
 ## Contributing
