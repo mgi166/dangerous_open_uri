@@ -11,10 +11,11 @@ describe OpenURI do
       end
 
       it 'given userinfo has two ":" opens dangerous uri' do
-        stub_request(:any, 'user:pass@www.example.com/secret/page.html')
+        stub_request(:any, 'user:pass:broken@www.example.com/secret/page.html')
           .to_return(body: 'aaa')
 
         expect(
+          # user = "user", password = "pass:broken"
           open('http://user:pass:broken@www.example.com/secret/page.html').read
         ).to eq('aaa')
       end

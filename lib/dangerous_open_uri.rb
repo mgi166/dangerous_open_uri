@@ -9,19 +9,15 @@ module OpenURI
       proxy_uri, proxy_user, proxy_pass = proxy
 
       if proxy_uri.userinfo
-        userinfo = proxy_uri.userinfo
-        user, pass = userinfo.to_s.split(':', -1)
-        proxy_user = user
-        proxy_pass = pass
+        proxy_user = proxy_uri.user
+        proxy_pass = proxy_uri.password
         proxy_uri.userinfo = ""
         proxy = [proxy_uri, proxy_user, proxy_pass]
       end
     end
 
     if target.userinfo
-      userinfo = target.userinfo
-      user, pass = userinfo.to_s.split(':', -1)
-      options[:http_basic_authentication] = [user, pass]
+      options[:http_basic_authentication] = [target.user, target.password]
       target.userinfo = ""
     end
 
