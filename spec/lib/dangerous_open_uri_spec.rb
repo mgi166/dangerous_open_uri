@@ -10,6 +10,18 @@ describe OpenURI do
         ).to eq('aaa')
       end
 
+      it 'receives the option[:http_basic_authentication] from the uri of argument' do
+        expect(OpenURI).to receive(:original_open_http)
+          .with(
+            kind_of(OpenURI::Buffer),
+            URI.parse('http://www.example.com/secret/page.html'),
+            nil,
+            http_basic_authentication: ['user', 'pass']
+          )
+
+        open('http://user:pass@www.example.com/secret/page.html')
+      end
+
       it 'given userinfo has two ":" opens dangerous uri' do
         stub_request(:any, 'user:pass:broken@www.example.com/secret/page.html')
           .to_return(body: 'aaa')
