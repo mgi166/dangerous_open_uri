@@ -84,15 +84,6 @@ describe OpenURI do
 
           open('http://www.example.com/secret/page.html', proxy: 'http://user:pass@proxy.example.com')
         end
-
-        it 'Net::HTTP::Proxy receives the correct proxy arguments' do
-          stub_request(:any, 'www.example.com/secret/page.html')
-
-          klass = Net::HTTP::Proxy('proxy.example.com', 80, 'user', 'pass')
-          expect(Net::HTTP).to receive(:Proxy).with('proxy.example.com', 80, 'user', 'pass').and_return(klass)
-
-          open('http://www.example.com/secret/page.html', proxy: 'http://user:pass@proxy.example.com')
-        end
       end
     end
 
