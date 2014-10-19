@@ -55,6 +55,22 @@ describe OpenURI do
           open('http://baduserinfo@www.example.com/secret/page.html').read
         ).to eq('aaa')
       end
+
+      it 'given proxy option as dangrous uri, original_open_http receives the correct proxy arguments' do
+        uri       = URI.parse('http://www.example.com/secret/page.html')
+        proxy_uri = URI.parse('http://proxy.example.com')
+        proxy     = [proxy_uri, 'user', 'pass']
+
+        expect(OpenURI).to receive(:original_open_http)
+          .with(
+            kind_of(OpenURI::Buffer),
+            uri,
+            proxy,
+            proxy: 'http://user:pass@proxy.example.com'
+          )
+
+        open('http://www.example.com/secret/page.html', proxy: 'http://user:pass@proxy.example.com')
+      end
     end
 
     context 'when request no basic authentication' do
