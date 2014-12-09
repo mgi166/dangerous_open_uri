@@ -68,6 +68,17 @@ describe OpenURI do
         ).to eq('aaa')
       end
 
+      it 'given URI::Generic does not change the argument object' do
+        uri = URI.parse('http://user:pass@www.example.com/secret/page.html')
+
+        stub_request(:any, 'http://user:pass@www.example.com/secret/page.html')
+          .to_return(body: 'aaa')
+
+        open(uri)
+
+        expect(uri).to eq(URI.parse('http://user:pass@www.example.com/secret/page.html'))
+      end
+
       describe 'given proxy' do
         it 'original_open_http receives the correct proxy arguments' do
           uri       = URI.parse('http://www.example.com/secret/page.html')

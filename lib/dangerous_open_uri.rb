@@ -16,11 +16,13 @@ module OpenURI
       end
     end
 
-    if target.userinfo
-      options[:http_basic_authentication] = [target.user, target.password]
-      target.userinfo = ""
+    _target = target.dup
+
+    if _target.userinfo
+      options[:http_basic_authentication] = [_target.user, _target.password]
+      _target.userinfo = ""
     end
 
-    original_open_http(buf, target, proxy, options)
+    original_open_http(buf, _target, proxy, options)
   end
 end
