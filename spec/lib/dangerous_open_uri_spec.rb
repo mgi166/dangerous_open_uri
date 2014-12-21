@@ -118,31 +118,33 @@ describe OpenURI do
 end
 
 describe URI::FTP do
-  context 'when the arguments is String(likely URI)' do
-    it 'logins with user and password' do
-      ftp = double(:ftp)
-      allow(Net::FTP).to receive(:new).and_return(ftp)
-      expect(ftp).to receive(:connect).with('ftp.example.com', 21)
-      expect(ftp).to receive(:passive=).with(true)
-      expect(ftp).to receive(:login).with('user', 'pass:word')
-      expect(ftp).to receive(:retrbinary).with("RETR test.txt", 4096)
-      expect(ftp).to receive(:close)
-      open('ftp://user:pass:word@ftp.example.com/test.txt')
+  let(:ftp) { double(:ftp) }
+
+  describe 'password includes ":"' do
+    context 'when the arguments is String(likely URI)' do
+      it 'logins with user and password' do
+        allow(Net::FTP).to receive(:new).and_return(ftp)
+        expect(ftp).to receive(:connect).with('ftp.example.com', 21)
+        expect(ftp).to receive(:passive=).with(true)
+        expect(ftp).to receive(:login).with('user', 'pass:word')
+        expect(ftp).to receive(:retrbinary).with("RETR test.txt", 4096)
+        expect(ftp).to receive(:close)
+        open('ftp://user:pass:word@ftp.example.com/test.txt')
+      end
     end
-  end
 
-  context 'when the arguments is URI::FTP' do
-    it 'logins with user and password' do
-      ftp = double(:ftp)
-      allow(Net::FTP).to receive(:new).and_return(ftp)
-      expect(ftp).to receive(:connect).with('ftp.example.com', 21)
-      expect(ftp).to receive(:passive=).with(true)
-      expect(ftp).to receive(:login).with('user', 'pa:ss:wo:rd')
-      expect(ftp).to receive(:retrbinary).with("RETR test.txt", 4096)
-      expect(ftp).to receive(:close)
+    context 'when the arguments is URI::FTP' do
+      it 'logins with user and password' do
+        allow(Net::FTP).to receive(:new).and_return(ftp)
+        expect(ftp).to receive(:connect).with('ftp.example.com', 21)
+        expect(ftp).to receive(:passive=).with(true)
+        expect(ftp).to receive(:login).with('user', 'pa:ss:wo:rd')
+        expect(ftp).to receive(:retrbinary).with("RETR test.txt", 4096)
+        expect(ftp).to receive(:close)
 
-      uri = URI.parse('ftp://user:pa:ss:wo:rd@ftp.example.com/test.txt')
-      open(uri)
+        uri = URI.parse('ftp://user:pa:ss:wo:rd@ftp.example.com/test.txt')
+        open(uri)
+      end
     end
   end
 end
