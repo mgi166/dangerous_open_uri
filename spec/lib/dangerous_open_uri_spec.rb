@@ -80,7 +80,7 @@ describe OpenURI do
         end
       end
 
-      context 'given URI::Generic object' do
+      describe 'given URI::Generic object' do
         it ' does not change the argument object' do
           stub_request(:any, 'http://user:pass@www.example.com/secret/page.html')
             .to_return(body: 'aaa')
@@ -89,6 +89,16 @@ describe OpenURI do
 
           open(uri)
           expect(uri).to eq(uri)
+        end
+
+        context 'when password includes ":"' do
+          it 'opens with user and password(includes ":")' do
+            stub_request(:any, 'http://user:pass:word@www.example.com/secret/page.html')
+              .to_return(body: 'aaa')
+
+            uri = URI.parse('http://user:pass:word@www.example.com/secret/page.html')
+            expect(open(uri).read).to eq('aaa')
+          end
         end
       end
 
