@@ -24,61 +24,72 @@ describe OpenURI do
         open('http://user:pass@www.example.com/secret/page.html')
       end
 
-      it 'given userinfo has two ":" opens dangerous uri' do
-        stub_request(:any, 'user:pass:broken@www.example.com/secret/page.html')
-          .to_return(body: 'aaa')
+      context 'given userinfo has two ":"' do
+        it 'opens with user and password(includes ":")' do
+          stub_request(:any, 'user:pass:broken@www.example.com/secret/page.html')
+            .to_return(body: 'aaa')
 
-        expect(
-          # user = "user", password = "pass:broken"
-          open('http://user:pass:broken@www.example.com/secret/page.html').read
-        ).to eq('aaa')
+          expect(
+            # user = "user", password = "pass:broken"
+            open('http://user:pass:broken@www.example.com/secret/page.html').read
+          ).to eq('aaa')
+        end
       end
 
-      it 'given has user but no password opens dangerous uri' do
-        stub_request(:any, 'user:@www.example.com/secret/page.html')
-          .to_return(body: 'aaa')
+      context 'given has user but no password' do
+        it 'opens with user only' do
+          stub_request(:any, 'user:@www.example.com/secret/page.html')
+            .to_return(body: 'aaa')
 
-        expect(
-          open('http://user:@www.example.com/secret/page.html').read
-        ).to eq('aaa')
+          expect(
+            open('http://user:@www.example.com/secret/page.html').read
+          ).to eq('aaa')
+        end
       end
 
-      it 'given no user but has password opens dangerous uri' do
-        stub_request(:any, ':pass@www.example.com/secret/page.html')
-          .to_return(body: 'aaa')
+      context 'given no user but has password' do
+        it 'opens with password only' do
+          stub_request(:any, ':pass@www.example.com/secret/page.html')
+            .to_return(body: 'aaa')
 
-        expect(
-          open('http://:pass@www.example.com/secret/page.html').read
-        ).to eq('aaa')
+          expect(
+            open('http://:pass@www.example.com/secret/page.html').read
+          ).to eq('aaa')
+        end
       end
 
-      it 'given userinfo == ":" opens dangerous uri' do
-        stub_request(:any, 'www.example.com/secret/page.html')
-          .to_return(body: 'aaa')
+      context 'given userinfo == ":"' do
+        it 'opens with no user and password' do
+          stub_request(:any, 'www.example.com/secret/page.html')
+            .to_return(body: 'aaa')
 
-        expect(
-          open('http://:@www.example.com/secret/page.html').read
-        ).to eq('aaa')
+          expect(
+            open('http://:@www.example.com/secret/page.html').read
+          ).to eq('aaa')
+        end
       end
 
-      it 'given userinfo not include ":" opens dangerous uri' do
-        stub_request(:any, 'baduserinfo:@www.example.com/secret/page.html')
-          .to_return(body: 'aaa')
+      context 'given userinfo not include ":"' do
+        it 'opens with only user' do
+          stub_request(:any, 'baduserinfo:@www.example.com/secret/page.html')
+            .to_return(body: 'aaa')
 
-        expect(
-          open('http://baduserinfo@www.example.com/secret/page.html').read
-        ).to eq('aaa')
+          expect(
+            open('http://baduserinfo@www.example.com/secret/page.html').read
+          ).to eq('aaa')
+        end
       end
 
-      it 'given URI::Generic does not change the argument object' do
-        uri = URI.parse('http://user:pass@www.example.com/secret/page.html')
+      context 'given URI::Generic object' do
+        it ' does not change the argument object' do
+          stub_request(:any, 'http://user:pass@www.example.com/secret/page.html')
+            .to_return(body: 'aaa')
 
-        stub_request(:any, 'http://user:pass@www.example.com/secret/page.html')
-          .to_return(body: 'aaa')
+          uri = URI.parse('http://user:pass@www.example.com/secret/page.html')
 
-        open(uri)
-
-        expect(uri).to eq(URI.parse('http://user:pass@www.example.com/secret/page.html'))
+          open(uri)
+          expect(uri).to eq(uri)
+        end
       end
 
       describe 'given proxy' do
