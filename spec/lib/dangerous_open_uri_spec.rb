@@ -1,3 +1,5 @@
+require 'net/ftp'
+
 describe OpenURI do
   describe '.open_http' do
     context 'when request with basic authentication' do
@@ -112,5 +114,18 @@ describe OpenURI do
         end.to raise_error URI::InvalidURIError
       end
     end
+  end
+end
+
+describe URI::FTP do
+  it 'logins with user and password' do
+    ftp = double(:ftp)
+    allow(Net::FTP).to receive(:new).and_return(ftp)
+    expect(ftp).to receive(:connect).with('ftp.example.com', 21)
+    expect(ftp).to receive(:passive=).with(true)
+    expect(ftp).to receive(:login).with('user', 'pass:word')
+    expect(ftp).to receive(:retrbinary).with("RETR test.txt", 4096)
+    expect(ftp).to receive(:close)
+    open('ftp://user:pass:word@ftp.example.com/test.txt')
   end
 end

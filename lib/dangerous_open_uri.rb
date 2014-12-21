@@ -1,5 +1,6 @@
 require "dangerous_open_uri/version"
 require 'open-uri'
+require 'uri/ftp'
 
 module OpenURI
   instance_eval { alias :original_open_http :open_http }
@@ -24,5 +25,21 @@ module OpenURI
     end
 
     original_open_http(buf, _target, proxy, options)
+  end
+end
+
+module URI
+  class FTP
+    alias_method :original_userinfo, :userinfo
+
+    def userinfo
+      _userinfo = original_userinfo.dup
+      _userinfo.instance_variable_set(:@__user, user)
+      _userinfo.instance_variable_set(:@__password, password)
+      def _userinfo.split(*args)
+        [@__user, @__password]
+      end
+      _userinfo
+    end
   end
 end
