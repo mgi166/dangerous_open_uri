@@ -4,7 +4,8 @@ describe OpenURI do
   describe '.open_http' do
     context 'when request with basic authentication' do
       it 'opens dangerous uri' do
-        stub_request(:any, 'user:pass@www.example.com/secret/page.html')
+        stub_request(:any, 'www.example.com/secret/page.html')
+          .with(headers: { Authorization: 'Basic dXNlcjpwYXNz' })
           .to_return(body: 'aaa')
 
         expect(
@@ -26,7 +27,8 @@ describe OpenURI do
 
       context 'given userinfo has two ":"' do
         it 'opens with user and password(includes ":")' do
-          stub_request(:any, 'user:pass:broken@www.example.com/secret/page.html')
+          stub_request(:any, 'www.example.com/secret/page.html')
+            .with(headers: { Authorization: 'Basic dXNlcjpwYXNzOmJyb2tlbg==' })
             .to_return(body: 'aaa')
 
           expect(
@@ -38,7 +40,8 @@ describe OpenURI do
 
       context 'given has user but no password' do
         it 'opens with user only' do
-          stub_request(:any, 'user:@www.example.com/secret/page.html')
+          stub_request(:any, 'www.example.com/secret/page.html')
+            .with(headers: { Authorization: 'Basic dXNlcjo=' })
             .to_return(body: 'aaa')
 
           expect(
@@ -49,7 +52,8 @@ describe OpenURI do
 
       context 'given no user but has password' do
         it 'opens with password only' do
-          stub_request(:any, ':pass@www.example.com/secret/page.html')
+          stub_request(:any, 'www.example.com/secret/page.html')
+            .with(headers: { Authorization: 'Basic OnBhc3M=' })
             .to_return(body: 'aaa')
 
           expect(
@@ -61,6 +65,7 @@ describe OpenURI do
       context 'given userinfo == ":"' do
         it 'opens with no user and password' do
           stub_request(:any, 'www.example.com/secret/page.html')
+            .with(headers: { Authorization: 'Basic Og==' })
             .to_return(body: 'aaa')
 
           expect(
@@ -71,7 +76,8 @@ describe OpenURI do
 
       context 'given userinfo not include ":"' do
         it 'opens with only user' do
-          stub_request(:any, 'baduserinfo:@www.example.com/secret/page.html')
+          stub_request(:any, 'www.example.com/secret/page.html')
+            .with(headers: { Authorization: 'Basic YmFkdXNlcmluZm86' })
             .to_return(body: 'aaa')
 
           expect(
@@ -82,7 +88,8 @@ describe OpenURI do
 
       describe 'given URI::Generic object' do
         it ' does not change the argument object' do
-          stub_request(:any, 'http://user:pass@www.example.com/secret/page.html')
+          stub_request(:any, 'www.example.com/secret/page.html')
+            .with(headers: { Authorization: 'Basic dXNlcjpwYXNz' })
             .to_return(body: 'aaa')
 
           uri = URI.parse('http://user:pass@www.example.com/secret/page.html')
@@ -93,7 +100,8 @@ describe OpenURI do
 
         context 'when password includes ":"' do
           it 'opens with user and password(includes ":")' do
-            stub_request(:any, 'http://user:pass:word@www.example.com/secret/page.html')
+            stub_request(:any, 'www.example.com/secret/page.html')
+              .with(headers: { Authorization: 'Basic dXNlcjpwYXNzOndvcmQ=' })
               .to_return(body: 'aaa')
 
             uri = URI.parse('http://user:pass:word@www.example.com/secret/page.html')
